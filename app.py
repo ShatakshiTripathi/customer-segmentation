@@ -2,7 +2,15 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+
+# ✅ Safe import for matplotlib
+try:
+    import matplotlib
+    import matplotlib.pyplot as plt
+except ModuleNotFoundError:
+    st.error("Matplotlib is not installed. Please check requirements.txt and redeploy the app.")
+    st.stop()
+
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
@@ -129,7 +137,12 @@ st.pyplot(fig)
 st.sidebar.header("🔮 Predict New Customer")
 input_data = []
 for feature in selected_features:
-    value = st.sidebar.number_input(f"Enter {feature}", float(df[feature].min()), float(df[feature].max()), float(df[feature].mean()))
+    value = st.sidebar.number_input(
+        f"Enter {feature}",
+        float(df[feature].min()),
+        float(df[feature].max()),
+        float(df[feature].mean())
+    )
     input_data.append(value)
 
 if st.sidebar.button("Predict Cluster"):
